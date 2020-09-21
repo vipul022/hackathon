@@ -1,5 +1,6 @@
 import { WEATHERBIT_KEY } from "./keys.js";
 const inputValue = document.querySelector(".inputValue");
+const countryCode = document.querySelector(".countryCode");
 const outputData = document.querySelector(".output-data");
 const city = document.getElementById("city");
 const temp = document.getElementById("temp");
@@ -9,9 +10,10 @@ const description = document.getElementById("description");
 // console.log(inputValue);
 
 let getWeather = () => {
+  console.log("countryCode =>", countryCode.value);
   axios
     .get(
-      `https://api.weatherbit.io/v2.0/forecast/daily?city=${inputValue.value}&country=AU&key=${WEATHERBIT_KEY}`
+      `https://api.weatherbit.io/v2.0/forecast/daily?city=${inputValue.value}&country=${countryCode.value}&key=${WEATHERBIT_KEY}`
     )
     .then((response) => {
       console.log(response);
