@@ -11,10 +11,10 @@ const days = document.getElementById("days")
 // console.log(inputValue);
 
 let getWeather = () => {
-    axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${inputValue.value}&country=AU&key=${WEATHERBIT_KEY}`)
+    axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${inputValue.value}&country=${countryCode.value}&key=${WEATHERBIT_KEY}`)
     .then(response => {
     console.log(response)
-    console.log(response.data.data[0].temp)
+    // console.log(response.data.data[0].temp)
     city.innerHTML = `Details for: ${response.data.city_name}`
     temp.innerHTML = `Current temperature: ${response.data.data[0].temp}`
     max.innerHTML = `Max: ${response.data.data[0].max_temp}`
@@ -29,6 +29,7 @@ let getWeather = () => {
     .catch((err) => console.log(err));
   console.log("test");
 };
+document.querySelector(".button").addEventListener("click", getWeather);
 
 var weekday = new Array(7);
 weekday[0] = "Sunday";
