@@ -20,7 +20,7 @@ let getWeather = () => {
       console.log(response);
       // console.log(response.data.data[0].temp)
       city.innerHTML = `Details for: ${response.data.city_name}`;
-      temp.innerHTML = `Current temperature: ${response.data.data[0].temp}`;
+      // temp.innerHTML = `Current temperature: ${response.data.data[0].temp}`;
       max.innerHTML = `Max: ${response.data.data[0].max_temp}`;
       min.innerHTML = `Min: ${response.data.data[0].min_temp}`;
       description.innerHTML = `Description: ${response.data.data[0].weather.description}`;
