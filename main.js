@@ -8,9 +8,7 @@ const temp = document.getElementById("temp");
 const max = document.getElementById("max");
 const min = document.getElementById("min");
 const description = document.getElementById("description");
-
 const forcast = document.querySelector("#forcast");
-// console.log(inputValue);
 
 let getWeather = () => {
   axios
@@ -19,17 +17,17 @@ let getWeather = () => {
     )
     .then((response) => {
       console.log(response);
-      // console.log(response.data.data[0].temp);
+      let data = response.data.data
       city.innerHTML = `Details for: ${response.data.city_name}`;
-      temp.innerHTML = `Current temperature: ${response.data.data[0].temp}`;
-      max.innerHTML = `Max: ${response.data.data[0].max_temp}`;
-      min.innerHTML = `Min: ${response.data.data[0].min_temp}`;
-      let icon = response.data.data[0].weather.icon;
+      temp.innerHTML = `Current temperature: ${data[0].temp}`;
+      max.innerHTML = `Max: ${data[0].max_temp}`;
+      min.innerHTML = `Min: ${data[0].min_temp}`;
+      let icon = data[0].weather.icon;
       currentImage.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
-      description.innerHTML = `Description: ${response.data.data[0].weather.description}`;
+      description.innerHTML = `Description: ${data[0].weather.description}`;
       forcast.innerHTML = "";
       for (let i = 1; i < 8; i++) {
-        icon = response.data.data[i].weather.icon;
+        icon = data[i].weather.icon;
         let day = document.createElement("div");
         let dayImg = document.createElement("img");
         let dayName = document.createElement("p");
@@ -42,31 +40,19 @@ let getWeather = () => {
         day.appendChild(dayMin);
         forcast.appendChild(day);
 
-        dayName.innerHTML = dayOfTheWeek(response.data.data[i].datetime);
+        dayName.innerHTML = dayOfTheWeek(data[i].datetime);
         dayImg.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
-        dayMax.innerHTML = `Max: ${response.data.data[i].max_temp}`;
-        dayMin.innerHTML = `Min: ${response.data.data[i].min_temp}`;
+        dayMax.innerHTML = `Max: ${data[i].max_temp}`;
+        dayMin.innerHTML = `Min: ${data[i].min_temp}`;
       }
     })
     .catch((err) => console.log(err));
-  console.log("test");
 };
 
-var weekday = new Array(7);
-weekday[0] = "Sunday";
-weekday[1] = "Monday";
-weekday[2] = "Tuesday";
-weekday[3] = "Wednesday";
-weekday[4] = "Thursday";
-weekday[5] = "Friday";
-weekday[6] = "Saturday";
-
+const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const dayOfTheWeek = (date) => {
   let d = new Date(date);
-  var n = weekday[d.getDay()];
-  return n;
+  return weekday[d.getDay()];
 };
-console.log(dayOfTheWeek("2020-09-21"));
-// datetime: "2020-09-20";
 
 document.querySelector(".button").addEventListener("click", getWeather);
