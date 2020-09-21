@@ -3,6 +3,7 @@ const inputValue = document.querySelector(".inputValue");
 const countryCode = document.querySelector(".countryCode");
 const outputData = document.querySelector(".output-data");
 const city = document.getElementById("city");
+const currentImage = document.getElementById("current-image");
 const temp = document.getElementById("temp");
 const max = document.getElementById("max");
 const min = document.getElementById("min");
@@ -23,6 +24,8 @@ let getWeather = () => {
       temp.innerHTML = `Current temperature: ${response.data.data[0].temp}`;
       max.innerHTML = `Max: ${response.data.data[0].max_temp}`;
       min.innerHTML = `Min: ${response.data.data[0].min_temp}`;
+      let icon = response.data.data[0].weather.icon;
+      currentImage.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
       description.innerHTML = `Description: ${response.data.data[0].weather.description}`;
       forcast.innerHTML = "";
       for (let i = 1; i < 8; i++) {
