@@ -29,6 +29,7 @@ let getWeather = () => {
       description.innerHTML = `Description: ${response.data.data[0].weather.description}`;
       forcast.innerHTML = "";
       for (let i = 1; i < 8; i++) {
+        icon = response.data.data[i].weather.icon;
         let day = document.createElement("div");
         let dayImg = document.createElement("img");
         let dayName = document.createElement("p");
@@ -42,6 +43,7 @@ let getWeather = () => {
         forcast.appendChild(day);
 
         dayName.innerHTML = dayOfTheWeek(response.data.data[i].datetime);
+        dayImg.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
         dayMax.innerHTML = `Max: ${response.data.data[i].max_temp}`;
         dayMin.innerHTML = `Min: ${response.data.data[i].min_temp}`;
       }
