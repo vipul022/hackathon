@@ -7,7 +7,8 @@ const temp = document.getElementById("temp");
 const max = document.getElementById("max");
 const min = document.getElementById("min");
 const description = document.getElementById("description");
-const days = document.getElementById("days");
+
+const forcast = document.querySelector("#forcast");
 // console.log(inputValue);
 
 let getWeather = () => {
@@ -23,12 +24,23 @@ let getWeather = () => {
       max.innerHTML = `Max: ${response.data.data[0].max_temp}`;
       min.innerHTML = `Min: ${response.data.data[0].min_temp}`;
       description.innerHTML = `Description: ${response.data.data[0].weather.description}`;
+      forcast.innerHTML = "";
       for (let i = 1; i < 8; i++) {
-        let li = document.createElement("li");
-        li.innerHTML = `${dayOfTheWeek(response.data.data[i].datetime)} max: ${
-          response.data.data[i].max_temp
-        }`;
-        days.appendChild(li);
+        let day = document.createElement("div");
+        let dayImg = document.createElement("img");
+        let dayName = document.createElement("p");
+        let dayMax = document.createElement("p");
+        let dayMin = document.createElement("p");
+
+        day.appendChild(dayName);
+        day.appendChild(dayImg);
+        day.appendChild(dayMax);
+        day.appendChild(dayMin);
+        forcast.appendChild(day);
+
+        dayName.innerHTML = dayOfTheWeek(response.data.data[i].datetime);
+        dayMax.innerHTML = `Max: ${response.data.data[i].max_temp}`;
+        dayMin.innerHTML = `Min: ${response.data.data[i].min_temp}`;
       }
     })
     .catch((err) => console.log(err));
