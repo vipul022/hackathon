@@ -17,7 +17,7 @@ let getWeather = () => {
     )
     .then((response) => {
       console.log(response);
-      // console.log(response.data.data[0].temp)
+      // console.log(response.data.data[0].temp);
       city.innerHTML = `Details for: ${response.data.city_name}`;
       temp.innerHTML = `Current temperature: ${response.data.data[0].temp}`;
       max.innerHTML = `Max: ${response.data.data[0].max_temp}`;
@@ -34,7 +34,6 @@ let getWeather = () => {
     .catch((err) => console.log(err));
   console.log("test");
 };
-document.querySelector(".button").addEventListener("click", getWeather);
 
 var weekday = new Array(7);
 weekday[0] = "Sunday";
@@ -52,3 +51,5 @@ const dayOfTheWeek = (date) => {
 };
 console.log(dayOfTheWeek("2020-09-21"));
 // datetime: "2020-09-20";
+
+document.querySelector(".button").addEventListener("click", getWeather);
