@@ -8,4 +8,4 @@ let getWeather = () => {
     console.log("test")
 }
 
-document.getElementById("button").addEventListener("click", getWeather)
+document.querySelector(".button").addEventListener("click", getWeather)
