@@ -1,4 +1,6 @@
-import { WEATHERBIT_KEY } from "./keys.js";
+import {
+  WEATHERBIT_KEY
+} from "./keys.js";
 const inputValue = document.querySelector(".inputValue");
 const countryCode = document.querySelector(".countryCode");
 const outputData = document.querySelector(".output-data");
