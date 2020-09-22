@@ -16,8 +16,13 @@ let getWeather = () => {
     .get(
       `https://api.weatherbit.io/v2.0/forecast/daily?city=${inputValue.value}&country=${countryCode.value}&key=${WEATHERBIT_KEY}`
     )
+
     .then((response) => {
       console.log(response);
+      if (!response.data.city_name) {
+        throw new Error("Enter valid city");
+      }
+
       let data = response.data.data;
       city.innerHTML = response.data.city_name;
       currentDate.innerHTML = getDate(data[0].datetime);
@@ -50,7 +55,7 @@ let getWeather = () => {
         dayMin.innerHTML = `Min: ${Math.floor(data[i].min_temp)}°c`;
       }
     })
-    .catch((err) => console.log(err));
+    .catch((err) => alert(err.message));
 };
 
 const weekday = [
