@@ -5,8 +5,8 @@ const outputData = document.querySelector(".output-data");
 const city = document.getElementById("city");
 const currentImage = document.getElementById("current-image");
 const temp = document.getElementById("temp");
-const max = document.getElementById("max");
-const min = document.getElementById("min");
+const maxMin = document.getElementById("max-min");
+const currentDate = document.querySelector("#current-date");
 const description = document.getElementById("description");
 const forcast = document.querySelector("#forcast");
 const moreInfo = document.getElementById("more-info")
@@ -26,16 +26,22 @@ let getWeather = () => {
     .get(
       `https://api.weatherbit.io/v2.0/forecast/daily?city=${inputValue.value}&country=${countryCode.value}&key=${WEATHERBIT_KEY}`
     )
+
     .then((response) => {
       console.log(response);
+      if (!response.data.city_name) {
+        throw new Error("Enter valid city");
+      }
       let data = response.data.data
-      city.innerHTML = `Details for: ${response.data.city_name}`;
-      temp.innerHTML = `Current temperature: ${data[0].temp}`;
-      max.innerHTML = `Max: ${data[0].max_temp}`;
-      min.innerHTML = `Min: ${data[0].min_temp}`;
+      city.innerHTML = response.data.city_name;
+      currentDate.innerHTML = getDate(data[0].datetime);
+      temp.innerHTML = `${Math.floor(data[0].temp)}°c`;
+      let maxTemp = Math.floor(data[0].max_temp);
+      let minTemp = Math.floor(data[0].min_temp);
+      maxMin.innerHTML = `Max/Min: ${maxTemp}°c/${minTemp}°c`;
       let icon = data[0].weather.icon;
       currentImage.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
-      description.innerHTML = `Description: ${data[0].weather.description}`;
+      description.innerHTML = data[0].weather.description;
       moreInfo.style.display = "inline-block";
       moreInfoContainer.style.display = "none"
       forcast.innerHTML = "";
@@ -55,8 +61,8 @@ let getWeather = () => {
 
         dayName.innerHTML = dayOfTheWeek(data[i].datetime);
         dayImg.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
-        dayMax.innerHTML = `Max: ${data[i].max_temp}`;
-        dayMin.innerHTML = `Min: ${data[i].min_temp}`;
+        dayMax.innerHTML = `Max: ${Math.floor(data[i].max_temp)}°c`;
+        dayMin.innerHTML = `Min: ${Math.floor(data[i].min_temp)}°c`;
       }
 
       const getMoreWeather = () => {  
@@ -84,14 +90,45 @@ let getWeather = () => {
       document.querySelector("#more-info").addEventListener("click", getMoreWeather);
 
     })
-
-    .catch((err) => console.log(err));
+    .catch((err) => alert(err.message));
 };
 
-const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const weekday = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 const dayOfTheWeek = (date) => {
   let d = new Date(date);
   return weekday[d.getDay()];
+};
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const getDate = (date) => {
+  let d = new Date(date);
+
+  let dateToday = `${weekday[d.getDay()]} ${d.getDate()} ${
+    months[d.getMonth()]
+  } ${d.getFullYear()}
+  `;
+  return dateToday;
 };
 
 moreInfo.style.display = "none";

@@ -10,19 +10,32 @@
 </head>
 
 <body>
+  <header>
+    <h1 id="app-name">Weather or Not</h1>
+  </header>
   <div class="input">
-    <input type="text" class="inputValue" placeholder="Enter a city" />
-    <input type="text" class="countryCode" placeholder="Enter country code" />
-    <input type="submit" id="get-weather" value="Submit" />
+    <label for="City"
+      >City: <input type="text" class="inputValue" placeholder="Enter a city"
+    /></label>
+    <label for="Country code"
+      >Country code:
+      <input
+        type="text"
+        label="Country code"
+        class="countryCode"
+        placeholder="Country code"
+    /></label>
+    <input type="submit" id="get-weather" class="button" value="Submit" />
   </div>
+
 
   <div class="output-data">
     <h2 id="city"></h2>
+    <p id="current-date"></p>
     <img id="current-image" src="" alt="" />
-    <p id="temp"></p>
-    <p id="max"></p>
-    <p id="min"></p>
     <p id="description"></p>
+    <p id="temp"></p>
+    <p id="max-min"></p>
 
     <button id="more-info" type="button">More Info</button>
     <div id="more-info-container">
