@@ -5,8 +5,8 @@ const outputData = document.querySelector(".output-data");
 const city = document.getElementById("city");
 const currentImage = document.getElementById("current-image");
 const temp = document.getElementById("temp");
-const max = document.getElementById("max");
-const min = document.getElementById("min");
+const maxMin = document.getElementById("max-min");
+
 const description = document.getElementById("description");
 const forcast = document.querySelector("#forcast");
 const currentDate = document.querySelector("#current-date");
@@ -22,8 +22,10 @@ let getWeather = () => {
       city.innerHTML = response.data.city_name;
       currentDate.innerHTML = getDate(data[0].datetime);
       temp.innerHTML = `${Math.floor(data[0].temp)}°c`;
-      max.innerHTML = `Max: ${Math.floor(data[0].max_temp)}°c`;
-      min.innerHTML = `Min: ${Math.floor(data[0].min_temp)}°c`;
+      let maxTemp = Math.floor(data[0].max_temp);
+      let minTemp = Math.floor(data[0].min_temp);
+      maxMin.innerHTML = `Max/Min: ${maxTemp}°c/${minTemp}°c`;
+
       let icon = data[0].weather.icon;
       currentImage.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
       description.innerHTML = data[0].weather.description;
