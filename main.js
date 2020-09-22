@@ -1,4 +1,6 @@
-import { WEATHERBIT_KEY } from "./keys.js";
+import {
+  WEATHERBIT_KEY
+} from "./keys.js";
 const inputValue = document.querySelector(".inputValue");
 const countryCode = document.querySelector(".countryCode");
 const outputData = document.querySelector(".output-data");
@@ -25,12 +27,23 @@ const humidity = document.getElementById("humidity")
 const moreInfoContainer = document.getElementById("more-info-container")
 
 
+const hideExtraWeather = () => {
+  console.log("in hide")
+  moreInfoContainer.style.display = "none";
+  moreInfo.textContent = "More Info"
+}
+
+const showExtraWeather = (data) => {
+  console.log("in show")
+  moreInfoContainer.style.display = "block";
+  moreInfo.textContent = "Less Info"
+}
+
 let getWeather = () => {
   axios
     .get(
       `https://api.weatherbit.io/v2.0/forecast/daily?city=${inputValue.value}&country=${countryCode.value}&key=${WEATHERBIT_KEY}`
     )
-
     .then((response) => {
       console.log(response);
       if (!response.data.city_name) {
@@ -47,7 +60,7 @@ let getWeather = () => {
       currentImage.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
       description.innerHTML = data[0].weather.description;
       moreInfo.style.display = "inline-block";
-      moreInfoContainer.style.display = "none"
+      hideExtraWeather()
       forcast.innerHTML = "";
       for (let i = 1; i < 8; i++) {
         icon = data[i].weather.icon;
@@ -68,46 +81,33 @@ let getWeather = () => {
         dayMax.innerHTML = `Max: ${Math.floor(data[i].max_temp)}°c`;
         dayMin.innerHTML = `Min: ${Math.floor(data[i].min_temp)}°c`;
       }
+      precipitation.innerHTML = `Precipitation chance: ${data[0].pop}%`
+      humidity.innerHTML = `Humidity: ${data[0].rh}%`
+      windSpeed.innerHTML = `Wind speed: ${Math.floor(data[0].wind_spd)} knots`
+      windGustSpeed.innerHTML = `Wind gust speed: ${Math.floor(data[0].wind_gust_spd)} knots`
+      windDirection.innerHTML = `Wind direction: ${data[0].wind_cdir_full}`
+      uvIndex.innerHTML = `UV Index: ${Math.floor(data[0].uv)}`
 
-      const getMoreWeather = () => {  
-        if (moreInfoContainer.style.display === "none") {
-          moreInfoContainer.style.display = "block";
-          moreInfo.textContent = "Less Info"
-        } else {
-          moreInfoContainer.style.display = "none";
-          moreInfo.textContent = "More Info"
-
-        }
-        precipitation.innerHTML = `Precipitation chance: ${data[0].pop}%`
-        humidity.innerHTML = `Humidity: ${data[0].rh}%`
-        windSpeed.innerHTML = `Wind speed: ${Math.floor(data[0].wind_spd)} knots`
-        windGustSpeed.innerHTML = `Wind gust speed: ${Math.floor(data[0].wind_gust_spd)} knots`
-        windDirection.innerHTML = `Wind direction: ${data[0].wind_cdir_full}`
-        uvIndex.innerHTML = `UV Index: ${Math.floor(data[0].uv)}`  
-
-        const getTime = (ts) => {     //function takes UNIX timestamp and returns am/pm time
-          let date = new Date(ts * 1000);
-          let ampm = "pm";
-          let hours = date.getHours();
-          let minutes = date.getMinutes()
-            hours < 12? (ampm = "am") : (hours += -12); //change from 24hr to am/pm
-          minutes = (minutes < 10? '0' : '') + minutes; //add 0 infront of minutes if 1 digit
-          return `${hours}:${minutes}${ampm}`
-        }
-
-        sunrise.innerHTML = `Sunrise: ${getTime(data[0].sunrise_ts)}`
-        sunset.innerHTML = `Sunset: ${getTime(data[0].sunset_ts)}`
-        moonrise.innerHTML = `Moonrise: ${getTime(data[0].moonrise_ts)}`
-        moonset.innerHTML = `Moonset: ${getTime(data[0].moonset_ts)}`
-        moonPhase.src = "/moonphases/moons2.png";
-        moonLine.style.borderRight = "5px solid #e01b45";
-        moonLine.style.height = "70px";
-        let moonWidth = Math.floor(data[0].moon_phase_lunation * 100);
-        moonLine.style.width = `${moonWidth}%`;   
+      const getTime = (ts) => { //function takes UNIX timestamp and returns am/pm time
+        let date = new Date(ts * 1000);
+        let ampm = "pm";
+        let hours = date.getHours();
+        let minutes = date.getMinutes()
+        console.log(hours, minutes)
+        hours < 12 ? (ampm = "am") : (hours += -12); //change from 24hr to am/pm
+        minutes = (minutes < 10 ? '0' : '') + minutes; //add 0 infront of minutes if 1 digit
+        return `${hours}:${minutes}${ampm}`
       }
-      
-      document.querySelector("#more-info").addEventListener("click", getMoreWeather);
 
+      sunrise.innerHTML = `Sunrise: ${getTime(data[0].sunrise_ts)}`
+      sunset.innerHTML = `Sunset: ${getTime(data[0].sunset_ts)}`
+      moonrise.innerHTML = `Moonrise: ${getTime(data[0].moonrise_ts)}`
+      moonset.innerHTML = `Moonset: ${getTime(data[0].moonset_ts)}`
+      moonPhase.src = "/moonphases/moons2.png";
+      moonLine.style.borderRight = "5px solid #e01b45";
+      moonLine.style.height = "70px";
+      let moonWidth = Math.floor(data[0].moon_phase_lunation * 100);
+      moonLine.style.width = `${moonWidth}%`;
     })
     .catch((err) => alert(err.message));
 };
@@ -152,3 +152,6 @@ const getDate = (date) => {
 
 moreInfo.style.display = "none";
 document.querySelector("#get-weather").addEventListener("click", getWeather);
+document.querySelector("#more-info").addEventListener("click", () => {
+  moreInfoContainer.style.display == "none" ? showExtraWeather() : hideExtraWeather()
+})
