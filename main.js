@@ -22,8 +22,8 @@ let getWeather = () => {
       city.innerHTML = response.data.city_name;
       currentDate.innerHTML = getDate(data[0].datetime);
       temp.innerHTML = `${Math.floor(data[0].temp)}°c`;
-      max.innerHTML = `Max: ${data[0].max_temp}`;
-      min.innerHTML = `Min: ${data[0].min_temp}`;
+      max.innerHTML = `Max: ${Math.floor(data[0].max_temp)}°c`;
+      min.innerHTML = `Min: ${Math.floor(data[0].min_temp)}°c`;
       let icon = data[0].weather.icon;
       currentImage.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
       description.innerHTML = `Description: ${data[0].weather.description}`;
@@ -44,8 +44,8 @@ let getWeather = () => {
 
         dayName.innerHTML = dayOfTheWeek(data[i].datetime);
         dayImg.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
-        dayMax.innerHTML = `Max: ${data[i].max_temp}`;
-        dayMin.innerHTML = `Min: ${data[i].min_temp}`;
+        dayMax.innerHTML = `Max: ${Math.floor(data[i].max_temp)}°c`;
+        dayMin.innerHTML = `Min: ${Math.floor(data[i].min_temp)}°c`;
       }
     })
     .catch((err) => console.log(err));
