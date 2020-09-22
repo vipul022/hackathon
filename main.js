@@ -122,10 +122,8 @@ let getWeather = () => {
       if (!response.data.city_name) {
         throw new Error("Enter valid city");
       }
-
       showCurrentWeather(response);
       let data = response.data.data;
-
       disappearExtraWeather();
       showForcast(data);
       showExtraWeather(data);
