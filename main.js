@@ -9,6 +9,7 @@ const max = document.getElementById("max");
 const min = document.getElementById("min");
 const description = document.getElementById("description");
 const forcast = document.querySelector("#forcast");
+const currentDate = document.querySelector("#current-date");
 
 let getWeather = () => {
   axios
@@ -17,9 +18,10 @@ let getWeather = () => {
     )
     .then((response) => {
       console.log(response);
-      let data = response.data.data
-      city.innerHTML = `Details for: ${response.data.city_name}`;
-      temp.innerHTML = `Current temperature: ${data[0].temp}`;
+      let data = response.data.data;
+      city.innerHTML = response.data.city_name;
+      currentDate.innerHTML = getDate(data[0].datetime);
+      temp.innerHTML = `${Math.floor(data[0].temp)}°c`;
       max.innerHTML = `Max: ${data[0].max_temp}`;
       min.innerHTML = `Min: ${data[0].min_temp}`;
       let icon = data[0].weather.icon;
@@ -49,10 +51,42 @@ let getWeather = () => {
     .catch((err) => console.log(err));
 };
 
-const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const weekday = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 const dayOfTheWeek = (date) => {
   let d = new Date(date);
   return weekday[d.getDay()];
+};
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const getDate = (date) => {
+  let d = new Date(date);
+
+  let dateToday = `${weekday[d.getDay()]} ${d.getDate()} ${
+    months[d.getMonth()]
+  } ${d.getFullYear()}
+  `;
+  return dateToday;
 };
 
 document.querySelector(".button").addEventListener("click", getWeather);
