@@ -26,7 +26,7 @@ let getWeather = () => {
       min.innerHTML = `Min: ${Math.floor(data[0].min_temp)}°c`;
       let icon = data[0].weather.icon;
       currentImage.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
-      description.innerHTML = `Description: ${data[0].weather.description}`;
+      description.innerHTML = data[0].weather.description;
       forcast.innerHTML = "";
       for (let i = 1; i < 8; i++) {
         icon = data[i].weather.icon;
