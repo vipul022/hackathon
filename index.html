@@ -1,29 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Weather App</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  </head>
-  <body>
-    <div class="input">
-      <input type="text" class="inputValue" placeholder="Enter a city" />
-      <input type="text" class="countryCode" placeholder="Enter country code" />
-      <input type="submit" class="button" value="Submit" />
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <div class="input">
+    <input type="text" class="inputValue" placeholder="Enter a city" />
+    <input type="text" class="countryCode" placeholder="Enter country code" />
+    <input type="submit" id="get-weather" value="Submit" />
+  </div>
+
+  <div class="output-data">
+    <h2 id="city"></h2>
+    <img id="current-image" src="" alt="" />
+    <p id="temp"></p>
+    <p id="max"></p>
+    <p id="min"></p>
+    <p id="description"></p>
+
+    <button id="more-info" type="button">More Info</button>
+    <div id="more-info-container">
+      <p id="precipitation"></p>
+      <p id="humidity"></p>
+      <p id="wind-speed"></p>
+      <p id="wind-gust-speed"></p>
+      <p id="wind-direction"></p>
+      <p id="uv-index"></p>
+      <div id="moons-container">
+        <img id="moon-phase" src="" alt="">
+        <div id="moon-line"></div>
+      </div>
     </div>
 
-    <div class="output-data">
-      <h2 id="city"></h2>
-      <img id="current-image" src="" alt="" />
-      <p id="temp"></p>
-      <p id="max"></p>
-      <p id="min"></p>
-      <p id="description"></p>
-      <div id="forcast"></div>
-    </div>
+    <div id="forcast"></div>
+  </div>
 
-    <script type="module" src="main.js"></script>
-  </body>
+  <script type="module" src="main.js"></script>
+</body>
+
 </html>

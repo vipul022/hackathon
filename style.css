@@ -24,4 +24,17 @@ body {
     margin: 10px;
     padding:10px;
 }
+#more-info {
+    display: inline-block;
+}
+#moons-container {
+    width: 615px;
+    height: 80px;
+    display: block;
+    margin: 20px auto 20px;   
+}
+#moon-line {
+    position: relative;
+    top: -68px;
+    width: 50%;
 }
