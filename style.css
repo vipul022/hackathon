@@ -9,7 +9,6 @@ html {
 body {
   color: white;
   text-align: center;
-  /* font-family: Arial, Helvetica, sans-serif; */
   font-family: "EB Garamond", serif;
 }
 
@@ -83,10 +82,15 @@ p {
   font-size: 20px;
 }
 
+.temp {
+  width: 100px;
+  margin: auto;
+}
+
 #tempCelcius,
 #tempFarenheit {
   font-size: 80px;
-  margin: 30px 0px;
+  margin: 10px 0px;
   text-shadow: 2px 6px rgba(0, 0, 0, 0.5);
   font-weight: 600;
 }
@@ -94,6 +98,7 @@ p {
 #description {
   font-size: 20px;
   font-style: italic;
+  margin: 0px;
 }
 
 #forcast {
@@ -106,6 +111,7 @@ p {
 #forcast img {
   height: 70px;
 }
+
 #forcast div {
   background-color: #002db3;
   box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
@@ -120,14 +126,16 @@ p {
 #time-zone {
   font-style: italic;
 }
+
 #moons-container {
   width: 615px;
   height: 80px;
   display: block;
   margin: 20px auto 20px;
 }
+
 #moon-line {
+  height: 70px;
   position: relative;
   top: -68px;
-  width: 50%;
 }
