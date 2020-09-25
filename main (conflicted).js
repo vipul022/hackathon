@@ -219,6 +219,14 @@ function showError(error) {
       break;
   }
 }
+
+
+
+
+
+
+
+
 //EVENT LISTNERS
 
 //This event listner invokes main function that retrieves data from the weatherbit API when submit button is clicked
@@ -241,4 +249,8 @@ temp.addEventListener("click", () => {
 
 window.addEventListener("load", () => {
   getLocation()
+  
 })
+// window.addEventListener('load', (event) => {
+//   console.log('page is fully loaded');
+// });
