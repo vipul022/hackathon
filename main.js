@@ -8,6 +8,7 @@ import {
 const inputValue = document.querySelector(".inputValue");
 const countryCode = document.querySelector(".countryCode");
 const outputData = document.querySelector(".output-data");
+const errorMessage = document.querySelector("#error-message");
 const city = document.getElementById("city");
 const currentImage = document.getElementById("current-image");
 const temp = document.querySelector(".temp");
@@ -45,7 +46,7 @@ const appearExtraWeather = () => {  // toggle hiding extra weather info and chan
   moreInfo.textContent = "Less Info";
 };
 
-const getTime = (ts) => {  // function takes UNIX timestamp and returns am/pm time
+const getTime = (ts) => {  // function takes UNIx timestamp and returns am/pm time
   let date = new Date(ts * 1000);  // x1000 due to JS requiring miliseconds
   let ampm = "pm";                  // default set to pm
   let hours = date.getHours();
@@ -66,7 +67,7 @@ const showExtraWeather = (data) => {  // content after clicking more info button
   windDirection.innerHTML = `Wind direction: ${data[0].wind_cdir_full}`;
   uvIndex.innerHTML = `UV Index: ${Math.floor(data[0].uv)}`;
   timeZone.innerHTML = "Time displayed as current location time zone:";
-  sunrise.innerHTML = `Sunrise: ${getTime(data[0].sunrise_ts)}`;  //getTime converts from UNIX timestamp to am/pm
+  sunrise.innerHTML = `Sunrise: ${getTime(data[0].sunrise_ts)}`;  //getTime converts from UNIx timestamp to am/pm
   sunset.innerHTML = `Sunset: ${getTime(data[0].sunset_ts)}`;
   moonrise.innerHTML = `Moonrise: ${getTime(data[0].moonrise_ts)}`;
   moonset.innerHTML = `Moonset: ${getTime(data[0].moonset_ts)}`;
@@ -76,7 +77,7 @@ const showExtraWeather = (data) => {  // content after clicking more info button
   // This div has a red right border that creates the line.
   // The width of the moonline div represents where we are in the moon phase cycle as a percentage.
 
-  moonPhase.src = "/moonphases/moons2.png";       // image showing different phases of the moon. 
+  moonPhase.src = "moonphases/moons2.png";       // image showing different phases of the moon. 
   moonLine.style.borderRight = "5px solid #e01b45"; // indicator line showing current phase of the moon
   let moonWidth = Math.floor(data[0].moon_phase_lunation * 100);  // translates moon phase data (0-1) to div width %
   moonLine.style.width = `${moonWidth}%`; //apply percentage width to the moonline div. 
@@ -125,11 +126,15 @@ const showForcast = (data) => {  // function to show brief forcast for the next 
 // Returns array with 16 days of forcasts
 // Key taken from keys file that is ignored by git
 
-let getWeather = () => { 
+let getWeather = (location) => {
+  let url = ''
+  if (location) {
+    url  = `https://api.weatherbit.io/v2.0/forecast/daily?${location}&key=${WEATHERBIT_KEY}`  
+  } else {
+    url = `https://api.weatherbit.io/v2.0/forecast/daily?city=${inputValue.value}&country=${countryCode.value}&key=${WEATHERBIT_KEY}`
+  }
   axios
-    .get(
-      `https://api.weatherbit.io/v2.0/forecast/daily?city=${inputValue.value}&country=${countryCode.value}&key=${WEATHERBIT_KEY}`
-    )
+    .get(url)
     .then((response) => {
       console.log(response);
       if (!response.data.city_name) {
@@ -141,7 +146,7 @@ let getWeather = () => {
       showForcast(data);              // shows the 7 day forcast
       showExtraWeather(data);         // shows extra weather info, but hidden until more info button is clicked
     })
-    .catch((err) => alert(err.message)); // error handling
+    .catch((err) => errorMessage.innerHTML = err.message); // error handling
 };
 
 const weekday = [ //array for dayOfTheWeek function
@@ -184,10 +189,50 @@ const buildDate = (date) => { // returns human readable date in day, date, month
 
 moreInfo.style.display = "none";  //hides the more info button on page load before submit button is clicked
 
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(sendPosition, showError);
+  } else { 
+    errorMessage.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function sendPosition(position) {
+  let location = `lat=${position.coords.latitude}&lon=${position.coords.longitude}`
+  getWeather(location)
+}
+
+function showError(error) {
+  switch(error.code) {
+    case error.PERMISSION_DENIED:
+      errorMessage.innerHTML = "User denied the request for Geolocation."
+      break;
+    case error.POSITION_UNAVAILABLE:
+      errorMessage.innerHTML = "Location information is unavailable."
+      break;
+    case error.TIMEOUT:
+      errorMessage.innerHTML = "The request to get user location timed out."
+      break;
+    case error.UNKNOWN_ERROR:
+      errorMessage.innerHTML = "An unknown error occurred."
+      break;
+  }
+}
+
+
+
+
+
+
+
+
 //EVENT LISTNERS
 
 //This event listner invokes main function that retrieves data from the weatherbit API when submit button is clicked
-document.querySelector("#get-weather").addEventListener("click", getWeather);  
+document.querySelector("#get-weather").addEventListener("click", () => {
+  getWeather(false)
+});  
 
 //This event listner displays/hides the more info data when the more info button is clicked
 document.querySelector("#more-info").addEventListener("click", () => {
@@ -201,3 +246,11 @@ temp.addEventListener("click", () => {
   tempFarenheit.classList.toggle("disappear");
   tempCelcius.classList.toggle("disappear");
 });
+
+window.addEventListener("load", () => {
+  getLocation()
+  
+})
+// window.addEventListener('load', (event) => {
+//   console.log('page is fully loaded');
+// });
