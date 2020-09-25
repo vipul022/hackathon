@@ -206,4 +206,39 @@ function sendPosition(position) {
 function showError(error) {
   switch(error.code) {
     case error.PERMISSION_DENIED:
-      errorMessage.innerHTML = 
+      errorMessage.innerHTML = "User denied the request for Geolocation."
+      break;
+    case error.POSITION_UNAVAILABLE:
+      errorMessage.innerHTML = "Location information is unavailable."
+      break;
+    case error.TIMEOUT:
+      errorMessage.innerHTML = "The request to get user location timed out."
+      break;
+    case error.UNKNOWN_ERROR:
+      errorMessage.innerHTML = "An unknown error occurred."
+      break;
+  }
+}
+//EVENT LISTNERS
+
+//This event listner invokes main function that retrieves data from the weatherbit API when submit button is clicked
+document.querySelector("#get-weather").addEventListener("click", () => {
+  getWeather(false)
+});  
+
+//This event listner displays/hides the more info data when the more info button is clicked
+document.querySelector("#more-info").addEventListener("click", () => {
+  moreInfoContainer.style.display == "none"
+    ? appearExtraWeather()
+    : disappearExtraWeather();
+});
+
+//This event listner toggles between celcius and farenheit data when the temperature is clicked
+temp.addEventListener("click", () => {
+  tempFarenheit.classList.toggle("disappear");
+  tempCelcius.classList.toggle("disappear");
+});
+
+window.addEventListener("load", () => {
+  getLocation()
+})
