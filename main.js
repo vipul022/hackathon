@@ -1,5 +1,7 @@
 // imports personal key from file - key.js for use in axios to get data from weatherbit API
-import { WEATHERBIT_KEY } from "./keys.js";
+import {
+  WEATHERBIT_KEY
+} from "./keys.js";
 
 // selecting all elements
 const inputValue = document.querySelector(".inputValue");
@@ -31,6 +33,7 @@ const moonrise = document.getElementById("moonrise");
 const moonset = document.getElementById("moonset");
 const humidity = document.getElementById("humidity");
 const moreInfoContainer = document.getElementById("more-info-container");
+const allDays = document.getElementsByClassName("days");
 // let dayMinCArr = [];
 // let dayMaxCArr = [];
 // let dayMinFArr = [];
@@ -62,21 +65,22 @@ const getTime = (ts) => {
   return `${hours}:${minutes}${ampm}`;
 };
 
-const showExtraWeather = (data) => {
+const showExtraWeather = (info, i = 0) => {
+  let data = info.data;
   // content after clicking more info button
-  precipitation.innerHTML = `Precipitation chance: ${data[0].pop}%`;
-  humidity.innerHTML = `Humidity: ${data[0].rh}%`;
-  windSpeed.innerHTML = `Wind speed: ${Math.floor(data[0].wind_spd)} knots`;
+  precipitation.innerHTML = `Precipitation chance: ${data[i].pop}%`;
+  humidity.innerHTML = `Humidity: ${data[i].rh}%`;
+  windSpeed.innerHTML = `Wind speed: ${Math.floor(data[i].wind_spd)} knots`;
   windGustSpeed.innerHTML = `Wind gust speed: ${Math.floor(
-    data[0].wind_gust_spd
+    data[i].wind_gust_spd
   )} knots`;
-  windDirection.innerHTML = `Wind direction: ${data[0].wind_cdir_full}`;
-  uvIndex.innerHTML = `UV Index: ${Math.floor(data[0].uv)}`;
+  windDirection.innerHTML = `Wind direction: ${data[i].wind_cdir_full}`;
+  uvIndex.innerHTML = `UV Index: ${Math.floor(data[i].uv)}`;
   timeZone.innerHTML = "Time displayed as current location time zone:";
-  sunrise.innerHTML = `Sunrise: ${getTime(data[0].sunrise_ts)}`; //getTime converts from UNIx timestamp to am/pm
-  sunset.innerHTML = `Sunset: ${getTime(data[0].sunset_ts)}`;
-  moonrise.innerHTML = `Moonrise: ${getTime(data[0].moonrise_ts)}`;
-  moonset.innerHTML = `Moonset: ${getTime(data[0].moonset_ts)}`;
+  sunrise.innerHTML = `Sunrise: ${getTime(data[i].sunrise_ts)}`; //getTime converts from UNIx timestamp to am/pm
+  sunset.innerHTML = `Sunset: ${getTime(data[i].sunset_ts)}`;
+  moonrise.innerHTML = `Moonrise: ${getTime(data[i].moonrise_ts)}`;
+  moonset.innerHTML = `Moonset: ${getTime(data[i].moonset_ts)}`;
 
   // How moon phase line works: The image is 615px wide inside a continer that is also 615px.
   // On the top of this, there is another div(moonLine) that is positioned absolute so it overlaps the image.
@@ -85,14 +89,14 @@ const showExtraWeather = (data) => {
 
   moonPhase.src = "moonphases/moons2.png"; // image showing different phases of the moon.
   moonLine.style.borderRight = "5px solid #e01b45"; // indicator line showing current phase of the moon
-  let moonWidth = Math.floor(data[0].moon_phase_lunation * 100); // translates moon phase data (0-1) to div width %
+  let moonWidth = Math.floor(data[i].moon_phase_lunation * 100); // translates moon phase data (0-1) to div width %
   moonLine.style.width = `${moonWidth}%`; //apply percentage width to the moonline div.
 };
 
-const showCurrentWeather = (response, i = 0) => {
+const showCurrentWeather = (info, i = 0) => {
   // This shows the current weather of the selected city
-  let data = response.data.data;
-  city.innerHTML = response.data.city_name;
+  let data = info.data
+  city.innerHTML = info.city_name;
   currentDate.innerHTML = buildDate(data[i].datetime); // calls buildDate that returns date, day, month, year in readable format
   tempCelcius.innerHTML = `${Math.floor(data[i].temp)}°c`;
   tempFarenheit.innerHTML = `${Math.floor(data[i].temp * 1.8 + 32)}°f`; // calculating celcius to fahrenheit
@@ -105,7 +109,8 @@ const showCurrentWeather = (response, i = 0) => {
   moreInfo.style.display = "inline-block"; // in JS as opposed to CSS to stop it displaying before submitting city
 };
 
-const showForcast = (data) => {
+const showForcast = (info) => {
+  let data = info.data;
   // function to show brief forcast for the next 7 days
   forcast.innerHTML = "";
   // let dayMaxC = "";
@@ -168,8 +173,6 @@ const showForcast = (data) => {
     // dayMaxCArr.push(dayMaxC);
     // dayMinCArr.push(dayMinC);
   }
-  var allDays = document.querySelectorAll(".days");
-  listenForDayClick(allDays)
 };
 
 // Main fuction that polls weatherbit API for forcast data and calls other functions.
@@ -192,11 +195,12 @@ let getWeather = (location) => {
         throw new Error("Enter valid city");
       }
       errorMessage.innerHTML = "";
-      showCurrentWeather(response); // shows all current day weather data
-      let data = response.data.data; // because this data is used a lot, created a variable to shorten it
+      let data = response.data; // because this data is used a lot, created a variable to shorten it
+      showCurrentWeather(data); // shows all current day weather data   
       disappearExtraWeather(); // hides the extra info as default view when the submit button is clicked
       showForcast(data); // shows the 7 day forcast
       showExtraWeather(data); // shows extra weather info, but hidden until more info button is clicked
+      changeDays(data);
     })
     .catch((err) => (errorMessage.innerHTML = err.message)); // error handling
 };
@@ -283,9 +287,9 @@ document.querySelector("#get-weather").addEventListener("click", () => {
 
 //This event listner displays/hides the more info data when the more info button is clicked
 document.querySelector("#more-info").addEventListener("click", () => {
-  moreInfoContainer.style.display == "none"
-    ? appearExtraWeather()
-    : disappearExtraWeather();
+  moreInfoContainer.style.display == "none" ?
+    appearExtraWeather() :
+    disappearExtraWeather();
 });
 
 //This event listner toggles between celcius and farenheit data when the temperature is clicked
@@ -294,8 +298,8 @@ temp.addEventListener("click", () => {
   allTempsArr.forEach((e) => {
     e.classList.toggle("disappear")
   });
-    
-    
+
+
   // tempFarenheit.classList.toggle("disappear");
   // tempCelcius.classList.toggle("disappear");
 
@@ -311,14 +315,17 @@ window.addEventListener("load", () => {
   getLocation();
 });
 
+const changeDays = (data) => {
+  let allDaysArr = Array.from(allDays)
 
-function checkIndex(event) {
-  console.log(Array.from(allDays).indexOf(event.currentTarget));
-  let i = Array.from(allDays).indexOf(event.currentTarget)
-}
+  function checkIndex(event) {
+    console.log(allDaysArr.indexOf(event.currentTarget));
+    let i = allDaysArr.indexOf(event.currentTarget) + 1
+    showCurrentWeather(data, i)
+    showExtraWeather(data, i)
+  }
 
-const listenForDayClick = (allDays) => {
-  allDays.forEach((check) => {
+  allDaysArr.forEach((check) => {
     check.addEventListener('click', checkIndex);
-  }) 
+  })
 }
