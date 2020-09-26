@@ -88,19 +88,19 @@ const showExtraWeather = (data) => {
   moonLine.style.width = `${moonWidth}%`; //apply percentage width to the moonline div.
 };
 
-const showCurrentWeather = (response) => {
+const showCurrentWeather = (response, i = 0) => {
   // This shows the current weather of the selected city
   let data = response.data.data;
   city.innerHTML = response.data.city_name;
-  currentDate.innerHTML = buildDate(data[0].datetime); // calls buildDate that returns date, day, month, year in readable format
-  tempCelcius.innerHTML = `${Math.floor(data[0].temp)}°c`;
-  tempFarenheit.innerHTML = `${Math.floor(data[0].temp * 1.8 + 32)}°f`; // calculating celcius to fahrenheit
-  let maxTemp = Math.floor(data[0].max_temp);
-  let minTemp = Math.floor(data[0].min_temp);
+  currentDate.innerHTML = buildDate(data[i].datetime); // calls buildDate that returns date, day, month, year in readable format
+  tempCelcius.innerHTML = `${Math.floor(data[i].temp)}°c`;
+  tempFarenheit.innerHTML = `${Math.floor(data[i].temp * 1.8 + 32)}°f`; // calculating celcius to fahrenheit
+  let maxTemp = Math.floor(data[i].max_temp);
+  let minTemp = Math.floor(data[i].min_temp);
   maxMin.innerHTML = `Max/Min: ${maxTemp}°c/${minTemp}°c`;
-  let icon = data[0].weather.icon;
+  let icon = data[i].weather.icon;
   currentImage.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`; // returns weather icon from the API site mapped to icon code
-  description.innerHTML = data[0].weather.description;
+  description.innerHTML = data[i].weather.description;
   moreInfo.style.display = "inline-block"; // in JS as opposed to CSS to stop it displaying before submitting city
 };
 
@@ -146,6 +146,7 @@ const showForcast = (data) => {
     day.appendChild(dayMinF);
     forcast.appendChild(day);
 
+
     dayName.innerHTML = dayOfTheWeek(data[i].datetime); // returns human readable day of the week instead of a number
     dayImg.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
 
@@ -156,13 +157,14 @@ const showForcast = (data) => {
 
     dayMaxF.classList.add("disappear");
     dayMinF.classList.add("disappear");
-
+    day.classList.add("days");
     console.log("dayMaxCArr=> ", dayMaxCArr);
 
     // dayMaxCArr.push(dayMaxC);
     // dayMinCArr.push(dayMinC);
   }
-  //
+  var allDays = document.querySelectorAll(".days");
+  listenForDayClick(allDays)
 };
 
 // Main fuction that polls weatherbit API for forcast data and calls other functions.
