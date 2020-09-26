@@ -296,3 +296,15 @@ temp.addEventListener("click", () => {
 window.addEventListener("load", () => {
   getLocation();
 });
+
+const listenForDayClick = (allDays) => {
+  allDays.forEach((check) => {
+    check.addEventListener('click', checkIndex);
+  })
+
+  function checkIndex(event) {
+    console.log(Array.from(allDays).indexOf(event.currentTarget));
+    let i = Array.from(allDays).indexOf(event.currentTarget)
+
+  }
+}
