@@ -31,21 +31,21 @@ const moonrise = document.getElementById("moonrise");
 const moonset = document.getElementById("moonset");
 const humidity = document.getElementById("humidity");
 const moreInfoContainer = document.getElementById("more-info-container");
-// let dayMinCArr = [];
-// let dayMaxCArr = [];
-// let dayMinFArr = [];
-// let dayMaxFArr = [];
+let dayMinCArr = [];
+let dayMaxCArr = [];
+let dayMinFArr = [];
+let dayMaxFArr = [];
 
 const disappearExtraWeather = () => {
   // toggle hiding extra weather info and change button text
-  // console.log("in hide");
+  console.log("in hide");
   moreInfoContainer.style.display = "none";
   moreInfo.textContent = "More Info";
 };
 
 const appearExtraWeather = () => {
   // toggle hiding extra weather info and change button text
-  // console.log("in show");
+  console.log("in show");
   moreInfoContainer.style.display = "block";
   moreInfo.textContent = "Less Info";
 };
@@ -108,10 +108,10 @@ const showCurrentWeather = (response, i = 0) => {
 const showForcast = (data) => {
   // function to show brief forcast for the next 7 days
   forcast.innerHTML = "";
-  // let dayMaxC = "";
-  // let dayMinC = "";
-  // let dayMaxF = "";
-  // let dayMinF = "";
+  let dayMaxC = "";
+  let dayMinC = "";
+  let dayMaxF = "";
+  let dayMinF = "";
 
   // let dayMinCArr = [];
   // let dayMaxCArr = [];
@@ -125,18 +125,18 @@ const showForcast = (data) => {
     let dayImg = document.createElement("img");
     let dayName = document.createElement("p");
 
-    let dayMaxC = document.createElement("p");
+    dayMaxC = document.createElement("p");
     // dayMaxCArr.push(dayMaxC);
 
     // console.log("dayMaxCArr =>", dayMaxCArr);
 
-    let dayMinC = document.createElement("p");
+    dayMinC = document.createElement("p");
     // dayMinCArr.push(dayMinC);
 
-    let dayMaxF = document.createElement("p");
+    dayMaxF = document.createElement("p");
     // dayMaxFArr.push(dayMaxF);
 
-    let dayMinF = document.createElement("p");
+    dayMinF = document.createElement("p");
     // dayMinFArr.push(dayMinF);
 
     day.appendChild(dayName);
@@ -156,14 +156,14 @@ const showForcast = (data) => {
     dayMaxF.innerHTML = `Max: ${Math.floor(data[i].max_temp * 1.8 + 32)}°f`;
     dayMinF.innerHTML = `Min: ${Math.floor(data[i].min_temp * 1.8 + 32)}°f`;
 
-    dayMaxF.classList.add("disappear");
+    dayMaxF.classList.add("disappear", ");
     dayMinF.classList.add("disappear");
     dayMaxF.classList.add("temps");
     dayMinF.classList.add("temps");
     dayMaxC.classList.add("temps");
     dayMinC.classList.add("temps");
     day.classList.add("days");
-    // console.log("dayMaxCArr=> ", dayMaxCArr);
+    console.log("dayMaxCArr=> ", dayMaxCArr);
 
     // dayMaxCArr.push(dayMaxC);
     // dayMinCArr.push(dayMinC);
