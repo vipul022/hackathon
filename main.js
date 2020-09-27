@@ -178,6 +178,44 @@ const showForcast = (info) => {
 // Returns array with 16 days of forcasts
 // Key taken from keys file that is ignored by git
 
+let axiosCall = (url) => {
+  let result = axios
+    .get(url)
+    .then((res) => {
+      if (!res.data.city_name) {
+        errorMessage.innerHTML = "Enter valid city";
+
+      } else {
+        errorMessage.innerHTML = "";
+        return res;
+      }
+    })
+    return result
+    // .then(request => { console.log(request); return request; })
+    
+    // .then((response) => {return response})
+    // .catch((err) => (errorMessage.innerHTML = err.message)); // error handling
+  // return response;
+}
+
+const populatePage = (data) => {
+  errorMessage.innerHTML = ""; //resets errorMessage for next error if there is one
+  showCurrentWeather(data); // shows all current day weather data   
+  disappearExtraWeather(); // hides the extra info as default view when the submit button is clicked
+  showForcast(data); // shows the 7 day forcast
+  showExtraWeather(data); // shows extra weather info, but hidden until more info button is clicked
+  changeDays(data); // listens for click on forcast days and replaces all current day weather data with that days weather data
+}
+
+const handleResponse = (res) => {
+  if (!res.data.city_name) {
+    errorMessage.innerHTML = "Enter valid city";    
+  } else {
+    let data = res.data; // because this data is used a lot, created a variable to shorten it
+    populatePage(data)
+  }
+}
+
 let getWeather = (location) => {
   let url = "";
   if (location) {
@@ -186,21 +224,8 @@ let getWeather = (location) => {
     url = `https://api.weatherbit.io/v2.0/forecast/daily?city=${inputValue.value}&country=${countryCode.value}&key=${WEATHERBIT_KEY}`;
   }
   axios
-    .get(url)
-    .then((response) => {
-      console.log(response);
-      if (!response.data.city_name) {
-        throw new Error("Enter valid city");
-      }
-      errorMessage.innerHTML = "";
-      let data = response.data; // because this data is used a lot, created a variable to shorten it
-      showCurrentWeather(data); // shows all current day weather data   
-      disappearExtraWeather(); // hides the extra info as default view when the submit button is clicked
-      showForcast(data); // shows the 7 day forcast
-      showExtraWeather(data); // shows extra weather info, but hidden until more info button is clicked
-      changeDays(data); // listens for click on forcast days and replaces all current day weather data with that days weather data
-    })
-    .catch((err) => (errorMessage.innerHTML = err.message)); // error handling
+  .get(url)
+  .then(handleResponse)
 };
 
 const weekday = [
@@ -313,7 +338,7 @@ window.addEventListener("load", () => { // get the users latitude and longitude 
   getLocation();
 });
 
-const changeDays = (data) => { 
+const changeDays = (data) => {
   let allDaysArr = Array.from(allDays) // selects all forecast days
 
   function checkIndex(event) {
