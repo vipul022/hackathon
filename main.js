@@ -66,14 +66,12 @@ const getTime = (ts) => {
 };
 
 const showExtraWeather = (info, i = 0) => {
-  let data = info.data;
   // content after clicking more info button
+  let data = info.data; // because this data is used a lot, created a variable to shorten it further
   precipitation.innerHTML = `Precipitation chance: ${data[i].pop}%`;
   humidity.innerHTML = `Humidity: ${data[i].rh}%`;
   windSpeed.innerHTML = `Wind speed: ${Math.floor(data[i].wind_spd)} knots`;
-  windGustSpeed.innerHTML = `Wind gust speed: ${Math.floor(
-    data[i].wind_gust_spd
-  )} knots`;
+  windGustSpeed.innerHTML = `Wind gust speed: ${Math.floor(data[i].wind_gust_spd)} knots`;
   windDirection.innerHTML = `Wind direction: ${data[i].wind_cdir_full}`;
   uvIndex.innerHTML = `UV Index: ${Math.floor(data[i].uv)}`;
   timeZone.innerHTML = "Time displayed as current location time zone:";
@@ -95,7 +93,7 @@ const showExtraWeather = (info, i = 0) => {
 
 const showCurrentWeather = (info, i = 0) => {
   // This shows the current weather of the selected city
-  let data = info.data
+  let data = info.data // because this data is used a lot, created a variable to shorten it further
   city.innerHTML = info.city_name;
   currentDate.innerHTML = buildDate(data[i].datetime); // calls buildDate that returns date, day, month, year in readable format
   tempCelcius.innerHTML = `${Math.floor(data[i].temp)}°c`;
@@ -110,7 +108,7 @@ const showCurrentWeather = (info, i = 0) => {
 };
 
 const showForcast = (info) => {
-  let data = info.data;
+  let data = info.data; // because this data is used a lot, created a variable to shorten it further
   // function to show brief forcast for the next 7 days
   forcast.innerHTML = "";
   // let dayMaxC = "";
@@ -200,7 +198,7 @@ let getWeather = (location) => {
       disappearExtraWeather(); // hides the extra info as default view when the submit button is clicked
       showForcast(data); // shows the 7 day forcast
       showExtraWeather(data); // shows extra weather info, but hidden until more info button is clicked
-      changeDays(data);
+      changeDays(data); // listens for click on forcast days and replaces all current day weather data with that days weather data
     })
     .catch((err) => (errorMessage.innerHTML = err.message)); // error handling
 };
@@ -311,21 +309,21 @@ temp.addEventListener("click", () => {
   // }
 });
 
-window.addEventListener("load", () => {
+window.addEventListener("load", () => { // get the users latitude and longitude as default city
   getLocation();
 });
 
-const changeDays = (data) => {
-  let allDaysArr = Array.from(allDays)
+const changeDays = (data) => { 
+  let allDaysArr = Array.from(allDays) // selects all forecast days
 
   function checkIndex(event) {
-    console.log(allDaysArr.indexOf(event.currentTarget));
-    let i = allDaysArr.indexOf(event.currentTarget) + 1
-    showCurrentWeather(data, i)
-    showExtraWeather(data, i)
+    // console.log(allDaysArr.indexOf(event.currentTarget));
+    let i = allDaysArr.indexOf(event.currentTarget) + 1 // i becomes an integer representing the forecast day selected
+    showCurrentWeather(data, i) //replaces the current day's weather with the forcast day weather
+    showExtraWeather(data, i) //replaces the current day's extra weather with the forcast day extra weather
   }
 
-  allDaysArr.forEach((check) => {
-    check.addEventListener('click', checkIndex);
+  allDaysArr.forEach((day) => {
+    day.addEventListener('click', checkIndex); //listens for forecast days clicked
   })
 }
