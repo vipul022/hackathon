@@ -178,26 +178,6 @@ const showForcast = (info) => {
 // Returns array with 16 days of forcasts
 // Key taken from keys file that is ignored by git
 
-let axiosCall = (url) => {
-  let result = axios
-    .get(url)
-    .then((res) => {
-      if (!res.data.city_name) {
-        errorMessage.innerHTML = "Enter valid city";
-
-      } else {
-        errorMessage.innerHTML = "";
-        return res;
-      }
-    })
-    return result
-    // .then(request => { console.log(request); return request; })
-    
-    // .then((response) => {return response})
-    // .catch((err) => (errorMessage.innerHTML = err.message)); // error handling
-  // return response;
-}
-
 const populatePage = (data) => {
   errorMessage.innerHTML = ""; //resets errorMessage for next error if there is one
   showCurrentWeather(data); // shows all current day weather data   
