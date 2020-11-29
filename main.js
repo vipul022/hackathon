@@ -1,7 +1,5 @@
 // imports personal key from file - key.js for use in axios to get data from weatherbit API
-import {
-  WEATHERBIT_KEY
-} from "./keys.js";
+import { WEATHERBIT_KEY } from "./keys.js";
 
 // selecting all elements
 const inputValue = document.querySelector(".inputValue");
@@ -13,7 +11,7 @@ const currentImage = document.getElementById("current-image");
 const temp = document.querySelector(".temp");
 const tempCelcius = document.getElementById("tempCelcius");
 const tempFarenheit = document.getElementById("tempFarenheit");
-const allTemps = document.getElementsByClassName("temps")
+const allTemps = document.getElementsByClassName("temps");
 const maxMin = document.getElementById("max-min");
 const currentDate = document.querySelector("#current-date");
 const description = document.getElementById("description");
@@ -59,7 +57,7 @@ const getTime = (ts) => {
   let ampm = "pm"; // default set to pm
   let hours = date.getHours();
   let minutes = date.getMinutes();
-  console.log(hours, minutes);
+  // console.log(hours, minutes);
   hours < 12 ? (ampm = "am") : (hours += -12); //change from 24hr to am/pm
   minutes = (minutes < 10 ? "0" : "") + minutes; //add 0 infront of minutes if 1 digit
   return `${hours}:${minutes}${ampm}`;
@@ -71,7 +69,9 @@ const showExtraWeather = (info, i = 0) => {
   precipitation.innerHTML = `Precipitation chance: ${data[i].pop}%`;
   humidity.innerHTML = `Humidity: ${data[i].rh}%`;
   windSpeed.innerHTML = `Wind speed: ${Math.floor(data[i].wind_spd)} knots`;
-  windGustSpeed.innerHTML = `Wind gust speed: ${Math.floor(data[i].wind_gust_spd)} knots`;
+  windGustSpeed.innerHTML = `Wind gust speed: ${Math.floor(
+    data[i].wind_gust_spd
+  )} knots`;
   windDirection.innerHTML = `Wind direction: ${data[i].wind_cdir_full}`;
   uvIndex.innerHTML = `UV Index: ${Math.floor(data[i].uv)}`;
   timeZone.innerHTML = "Time displayed as current location time zone:";
@@ -93,7 +93,7 @@ const showExtraWeather = (info, i = 0) => {
 
 const showCurrentWeather = (info, i = 0) => {
   // This shows the current weather of the selected city
-  let data = info.data // because this data is used a lot, created a variable to shorten it further
+  let data = info.data; // because this data is used a lot, created a variable to shorten it further
   city.innerHTML = info.city_name;
   currentDate.innerHTML = buildDate(data[i].datetime); // calls buildDate that returns date, day, month, year in readable format
   tempCelcius.innerHTML = `${Math.floor(data[i].temp)}°c`;
@@ -150,7 +150,6 @@ const showForcast = (info) => {
     day.appendChild(dayMinF);
     forcast.appendChild(day);
 
-
     dayName.innerHTML = dayOfTheWeek(data[i].datetime); // returns human readable day of the week instead of a number
     dayImg.src = `https://www.weatherbit.io/static/img/icons/${icon}.png`;
 
@@ -180,21 +179,21 @@ const showForcast = (info) => {
 
 const populatePage = (data) => {
   errorMessage.innerHTML = ""; //resets errorMessage for next error if there is one
-  showCurrentWeather(data); // shows all current day weather data   
+  showCurrentWeather(data); // shows all current day weather data
   disappearExtraWeather(); // hides the extra info as default view when the submit button is clicked
   showForcast(data); // shows the 7 day forcast
   showExtraWeather(data); // shows extra weather info, but hidden until more info button is clicked
   changeDays(data); // listens for click on forcast days and replaces all current day weather data with that days weather data
-}
+};
 
 const handleResponse = (res) => {
   if (!res.data.city_name) {
-    errorMessage.innerHTML = "Enter valid city";    
+    errorMessage.innerHTML = "Enter valid city";
   } else {
     let data = res.data; // because this data is used a lot, created a variable to shorten it
-    populatePage(data)
+    populatePage(data);
   }
-}
+};
 
 let getWeather = (location) => {
   let url = "";
@@ -203,9 +202,7 @@ let getWeather = (location) => {
   } else {
     url = `https://api.weatherbit.io/v2.0/forecast/daily?city=${inputValue.value}&country=${countryCode.value}&key=${WEATHERBIT_KEY}`;
   }
-  axios
-  .get(url)
-  .then(handleResponse)
+  axios.get(url).then(handleResponse);
 };
 
 const weekday = [
@@ -290,18 +287,17 @@ document.querySelector("#get-weather").addEventListener("click", () => {
 
 //This event listner displays/hides the more info data when the more info button is clicked
 document.querySelector("#more-info").addEventListener("click", () => {
-  moreInfoContainer.style.display == "none" ?
-    appearExtraWeather() :
-    disappearExtraWeather();
+  moreInfoContainer.style.display == "none"
+    ? appearExtraWeather()
+    : disappearExtraWeather();
 });
 
 //This event listner toggles between celcius and farenheit data when the temperature is clicked
 temp.addEventListener("click", () => {
-  let allTempsArr = Array.from(allTemps)
+  let allTempsArr = Array.from(allTemps);
   allTempsArr.forEach((e) => {
-    e.classList.toggle("disappear")
+    e.classList.toggle("disappear");
   });
-
 
   // tempFarenheit.classList.toggle("disappear");
   // tempCelcius.classList.toggle("disappear");
@@ -314,21 +310,22 @@ temp.addEventListener("click", () => {
   // }
 });
 
-window.addEventListener("load", () => { // get the users latitude and longitude as default city
+window.addEventListener("load", () => {
+  // get the users latitude and longitude as default city
   getLocation();
 });
 
 const changeDays = (data) => {
-  let allDaysArr = Array.from(allDays) // selects all forecast days
+  let allDaysArr = Array.from(allDays); // selects all forecast days
 
   function checkIndex(event) {
     // console.log(allDaysArr.indexOf(event.currentTarget));
-    let i = allDaysArr.indexOf(event.currentTarget) + 1 // i becomes an integer representing the forecast day selected
-    showCurrentWeather(data, i) //replaces the current day's weather with the forcast day weather
-    showExtraWeather(data, i) //replaces the current day's extra weather with the forcast day extra weather
+    let i = allDaysArr.indexOf(event.currentTarget) + 1; // i becomes an integer representing the forecast day selected
+    showCurrentWeather(data, i); //replaces the current day's weather with the forcast day weather
+    showExtraWeather(data, i); //replaces the current day's extra weather with the forcast day extra weather
   }
 
   allDaysArr.forEach((day) => {
-    day.addEventListener('click', checkIndex); //listens for forecast days clicked
-  })
-}
+    day.addEventListener("click", checkIndex); //listens for forecast days clicked
+  });
+};
